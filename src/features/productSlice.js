@@ -1,26 +1,42 @@
-import {createSlice,createAsyncThunk,createEntityAdapter} from '@reduxjs/toolkit';
-import axios from 'axios';
+import {createSlice,createAsyncThunk} from '@reduxjs/toolkit';
 
+
+const initialState = {
+    isLoading : true,
+    isError : false,
+    message : 'no error',
+    data : []
+}
 
 export const getProducts = createAsyncThunk("product/getProducts",async()=> {
-    const response = await axios.get('http://localhost:5000/products');
-    return response.data;
+    try {
+        const request = await fetch('http://loalhost:5000/products')
+        const response = request.json()
+        return response
+    } catch (error) {
+        return false
+    }
 })
 
-const productEntity = createEntityAdapter({
-    selectId:(product) => product.id
-})
+
 
 const productSlice = createSlice({
     name : 'product',
-    initialState: productEntity.getInitialState,
+    initialState,
     extraReducers:{
         [getProducts.fulfilled]: (state,action) =>{
-            productEntity.setAll(state,action.payload)
+            if (action.payload === false)  {
+                state.isLoading = false
+                state.isError = true
+                state.message = 'error'
+            }else {
+                state.isLoading = false 
+                state.data = action.payload
+            }
         }
     }
 })
 
 
-export const productSelectors = productEntity.getSelectors(state => state.product)
+export const productSelectors = (state) => state.product
 export default productSlice.reducer
