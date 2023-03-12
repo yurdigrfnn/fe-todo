@@ -1,4 +1,4 @@
-import { getfetch, loginFetch } from "./authService";
+import { getfetch, loginFetch, validateFetch } from "./authService";
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -23,6 +23,15 @@ export const getTodo = createAsyncThunk('todo', async ()=>{
 })
 
 
+export const validateLogin = createAsyncThunk('validate/Login', async () => {
+    const response = await validateFetch();
+    const data = await response.json()
+    return data
+})
+
+
+
+
 export const loginAuthSlice = createSlice({
     name: 'auth',
     initialState,
@@ -38,7 +47,7 @@ export const loginAuthSlice = createSlice({
             } else {
                 state.isError = false;
                 state.message = action.payload.message;
-                document.cookie = `Authorization=${action.payload.token}; path=/`;
+                state.isLogined = true
             }
         },
         [getTodo.pending]:() => {
@@ -49,6 +58,18 @@ export const loginAuthSlice = createSlice({
                 state.data = ["unauhorize"]
             } else {
                 state.data = action.payload.todos
+            }
+        },
+        [validateLogin.pending]: (state,action) => {
+            state.loading = true
+        },
+        [validateLogin.fulfilled] : (state,action) => {
+            console.log(action.payload);
+            state.loading = false
+            if (action.payload.isError) {
+                state.isLogined = false
+            } else {
+                state.isLogined = true
             }
         }
     }

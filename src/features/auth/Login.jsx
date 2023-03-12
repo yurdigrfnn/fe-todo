@@ -1,21 +1,26 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authState, loginAuth,getTodo } from "./authSlice";
+import {useNavigate} from "react-router-dom"
 
 export default function Login() {
   const dispatch = useDispatch();
   const auth = useSelector(authState);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginAuth({email:email,password: password}))
   };
-  React.useEffect(()=>{
-    dispatch(getTodo())
-  },[auth.isError])
-  console.log(auth.data)
+
+  React.useEffect(()=> {
+    if (auth.isLogined) {
+      navigate('/')
+    }
+  },[auth.isLogined])
+  
   return (
     <div>
       <div>

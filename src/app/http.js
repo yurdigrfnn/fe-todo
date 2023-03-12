@@ -6,6 +6,7 @@ const getBaseUrl = (path = "") => {
 const getHeadersDefault = () => {
     return {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
     };
 }
 
@@ -19,6 +20,7 @@ const fetchGet = (path, headers = {}) => {
             ...getHeadersDefault(),
             ...headers,
         },
+        credentials: 'include'
     });
 }
 
@@ -29,7 +31,8 @@ const fetchPost = (path,body ,headers = {}) => {
             ...getHeadersDefault(),
             ...headers,
         },
-        body : JSON.stringify(body)
+        body : JSON.stringify(body),
+        credentials: 'include'
     });
 }
 

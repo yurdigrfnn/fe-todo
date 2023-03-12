@@ -5,5 +5,9 @@ export const loginFetch = ({email,password}) => {
 }
 
 export const getfetch = () => {
-    return http.fetchGet('/api/todo')
+    return http.fetchGet(`/api/todo`)
+}
+
+export const validateFetch = () => {
+    return http.fetchGet('/api/validate')
 }
