@@ -1,8 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-import React,{useEffect} from 'react';
-import Todo from '../features/todo/Todo';
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import Todo from "../features/todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
-import { authState, loginAuth,getTodo,validateLogin } from "../features/auth/authSlice";
+import {
+  authState,
+  validateLogin,
+} from "../features/auth/authSlice";
 
 // protected route component
 const ProtectedRoute = ({ component: Component, ...rest }) => {
@@ -15,13 +18,15 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   }, [auth.isLogined, navigate]);
 
   if (auth.isLogined === false) {
-    navigate('/login')
+    navigate("/login");
   }
   return (
     <>
+      {auth.isLogined ? (
         <div>
-            <Todo />
+          <Todo />
         </div>
+      ) : null}
     </>
   );
 };
