@@ -36,8 +36,34 @@ const fetchPost = (path,body ,headers = {}) => {
     });
 }
 
+const fetchDeleteWithParam = (path,headers = {}) => {
+    return fetch(getBaseUrl(path),{
+        method: 'DELETE',
+        headers : {
+            ...getHeadersDefault(),
+            ...headers,
+        },
+        credentials: 'include'
+    })
+}
+
+const fetchPutWithParam = (path,body,headers = {}) => {
+    return fetch(getBaseUrl(path),{
+        method: 'PUT',
+        headers : {
+            ...getHeadersDefault(),
+            ...headers,
+        },
+        body : JSON.stringify(body),
+        credentials: 'include'
+    })
+} 
+
+
 
 export const http = {
     fetchGet,
-    fetchPost
+    fetchPost,
+    fetchDeleteWithParam,
+    fetchPutWithParam
 }
