@@ -1,9 +1,11 @@
+
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authState, loginAuth, getTodo } from "./authSlice";
 import { useNavigate } from "react-router-dom";
+import { signUp } from "./authService";
 
-export default function Login() {
+export default function SignUp() {
   const dispatch = useDispatch();
   const auth = useSelector(authState);
   const [email, setEmail] = React.useState("");
@@ -12,20 +14,22 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginAuth({ email: email, password: password }));
+    const createAccoun = async () => {
+        const response = await signUp({email :email, password:password})
+        const data = await response.json()
+        if (data.isError == false){
+            navigate('/login')
+        } 
+    }
+    createAccoun()
   };
 
-  React.useEffect(() => {
-    if (auth.isLogined) {
-      navigate("/");
-    }
-  }, [auth.isLogined]);
 
   return (
     <div>
       <div className="w-11/12 mx-auto h-screen flex flex-col justify-center content-center">
         <div className="sm:w-8/12 transition-all lg:w-3/12 md:w-5/12 px-4 py-4 border w-full m-0 m-auto h-max border-gray-300 shadow-xl rounded-md">
-          <h1 className="text-center mb-3 text-lg font-medium">Login</h1>
+          <h1 className="text-center mb-3 text-lg font-medium">Sign Up</h1>
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
@@ -52,14 +56,12 @@ export default function Login() {
                 name=""
                 id=""
                 required
-
               />
-              <h1 onClick={() => navigate('/signup')} className="text-sm text-end underline cursor-pointer text-blue-500">Sign up</h1>
+              <h1 onClick={() => navigate('/login')} className="text-sm text-end underline cursor-pointer text-blue-500">Login</h1>
             </div>
-            
             </div>
             <div>
-              <button className="bg-red-600 px-4 py-2 text-sm border border-red-600  font-medium rounded-md text-white" type="submit">Login</button>
+              <button className="bg-red-600 px-4 py-2 text-sm border border-red-600  font-medium rounded-md text-white" type="submit">Sign Up</button>
             </div>
           </form>
         </div>
