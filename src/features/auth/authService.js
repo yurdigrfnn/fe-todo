@@ -11,3 +11,9 @@ export const getfetch = () => {
 export const validateFetch = () => {
     return http.fetchGet('/api/validate')
 }
+
+export const signUp = ({email,password}) => {
+    return http.fetchPost("/api/register",{email :email,password:password})
+}
+
+
