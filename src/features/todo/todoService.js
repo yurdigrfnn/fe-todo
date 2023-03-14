@@ -13,7 +13,7 @@ export const deleteTodoByid = (id) => {
   return http.fetchDeleteWithParam(`/api/todo/${id}`);
 };
 
-export const putTodoNameByid = (id, { name }) => {
+export const putTodoNameByid = ({id, name }) => {
   return http.fetchPutWithParam(`/api/todo/${id}`, { name });
 };
 
