@@ -29,9 +29,6 @@ export const validateLogin = createAsyncThunk('validate/Login', async () => {
     return data
 })
 
-
-
-
 export const loginAuthSlice = createSlice({
     name: 'auth',
     initialState,
@@ -64,7 +61,6 @@ export const loginAuthSlice = createSlice({
             state.loading = true
         },
         [validateLogin.fulfilled] : (state,action) => {
-            console.log(action.payload);
             state.loading = false
             if (action.payload.isError) {
                 state.isLogined = false

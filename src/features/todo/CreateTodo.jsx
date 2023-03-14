@@ -14,8 +14,6 @@ export default function CreateTodo({page,limit}) {
   const dispatch = useDispatch();
   const actionCreate = useSelector(actionSelector);
 
-  console.log(actionCreate);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createTodo({ name: actionCreate.nameTodo })).then(() => dispatch(getAllTodo({

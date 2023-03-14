@@ -2,19 +2,20 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  closeModalEdit,
+  setName,
   actionSelector,
-  closeModalDelete,
-  todoDelete,
   todoEdit,
 } from "./actionSlice";
 import { getAllTodo } from "./getTodoSlice";
 
-export default function DeleteTodo({ page, limit }) {
+export default function UpdateTodo({ page, limit }) {
   const dispatch = useDispatch();
   const actionCreate = useSelector(actionSelector);
 
-  const handleDelete = () => {
-    dispatch(todoDelete(actionCreate.deleteId)).then(() =>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(todoEdit({ id: actionCreate.editId, name: actionCreate.nameTodo })).then(() =>
       dispatch(
         getAllTodo({
           page: page,
@@ -25,11 +26,11 @@ export default function DeleteTodo({ page, limit }) {
   };
   return (
     <>
-      <Transition appear show={actionCreate.isOpenDelete} as={Fragment}>
+      <Transition appear show={actionCreate.isOpenEdit} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
-          onClose={() => dispatch(closeModalDelete())}
+          onClose={() => dispatch(closeModalEdit())}
         >
           <Transition.Child
             as={Fragment}
@@ -59,25 +60,40 @@ export default function DeleteTodo({ page, limit }) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Delete Todo
+                    Edit Todo
                   </Dialog.Title>
-                    <h1>are you sure want to delete this todo ?</h1>
+                  <form action="" onSubmit={handleSubmit}>
+                    <div className="mt-2">
+                      <div className="flex flex-col gap-1">
+                        <label htmlFor="" className="text-sm font-medium">
+                          Name
+                        </label>
+                        <input
+                          className="py-1 px-3 focus:outline-none border-gray-300 focus:border-blue-300 border rounded-md"
+                          value={actionCreate.nameTodo}
+                          onChange={(e) => dispatch(setName(e.target.value))}
+                          type="text"
+                          required
+                        />
+                      </div>
+                    </div>
+
                     <div className="mt-5 flex gap-2">
                       <button
-                        type="button"
-                        onClick={handleDelete}
+                        type="submit"
                         className="bg-red-600 border border-red-600 px-4 py-2 text-sm font-medium rounded-md text-white"
                       >
-                        Delete Todo
+                        Edit Todo
                       </button>
                       <button
                         className="border border-gray-300  px-4 py-2 text-sm font-medium rounded-md"
-                        onClick={() => dispatch(closeModalDelete())}
+                        onClick={() => dispatch(closeModalEdit())}
                         type="button"
                       >
                         Cancle
                       </button>
                     </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
