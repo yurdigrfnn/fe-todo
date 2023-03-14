@@ -8,9 +8,9 @@ import Checkbox from "@mui/material/Checkbox";
 import { HiOutlineTrash,HiOutlinePencil } from "react-icons/hi";
 import CreateTodo from "./CreateTodo";
 import Pagination from "../../components/Pagination";
+import {todoComplete} from '../todo/actionSlice'
 
 export default function Todo() {
-  const [checkedIndex, setCheckedIndex] = useState(-1);
   const dispatch = useDispatch();
   const todo = useSelector(getAllTodoSelector);
 
@@ -21,7 +21,6 @@ export default function Todo() {
       limit : todo.limit
     }));
   }, [todo.page]);
-  console.log("tete",todo);
 
   const handleLogout = () => {
     const validateUser = async () => {
@@ -42,12 +41,13 @@ export default function Todo() {
     validateUser();
   };
 
-  const handleCheckboxChange = (event, index) => {
-    if (checkedIndex === index) {
-      setCheckedIndex(-1);
-    } else {
-      setCheckedIndex(index);
-    }
+  const handleCheckboxChange = (data) => {
+    dispatch(todoComplete({id : data.id ,complete : !data.complete})).then(()=> {
+      dispatch(getAllTodo({
+        page : todo.page,
+        limit : todo.limit
+      }));
+    })
   };
   const handleOnPageChange = (page) => {
     dispatch(setPage(page));
@@ -74,11 +74,10 @@ export default function Todo() {
               <div className="flex justify-between px-2 rounded-md bg-white" key={item.id}>
                 <div className="flex">
                   <Checkbox
-                    checked={checkedIndex === index}
-                    onChange={(event) => handleCheckboxChange(event, index)}
-                    defaultChecked={false}
+                    checked={item.complete}
+                    onChange={() => handleCheckboxChange(item)}
                   />
-                  <h1 className="my-auto">{item.name}</h1>
+                  <h1 className={`my-auto ${item.complete ? 'line-through' : ''}`}>{item.name}</h1>
                 </div>
 
                 <div className="my-auto gap-2 flex">
