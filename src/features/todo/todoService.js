@@ -17,7 +17,7 @@ export const putTodoNameByid = (id, { name }) => {
   return http.fetchPutWithParam(`/api/todo/${id}`, { name });
 };
 
-export const putTodoCompleteByid = (id, { complete }) => {
-    return http.fetchPutWithParam(`/api/todo/${id}`, { complete });
+export const putTodoCompleteByid = ({id,complete}) => {
+    return http.fetchPutWithParamBool(`/api/todo/${id}`, complete);
   };
   

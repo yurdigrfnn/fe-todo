@@ -20,6 +20,12 @@ export const createTodo = createAsyncThunk('create/todo', async ({name}) => {
     return data
 })
 
+export const todoComplete = createAsyncThunk('complete/todo', async({id,complete}) => {
+    const response = await putTodoCompleteByid({id,complete})
+    const data = await response.json()
+    console.log("param",complete)
+})
+
 
 const actionSlice = createSlice({
     name : "action",
@@ -55,6 +61,12 @@ const actionSlice = createSlice({
                 state.isOpenCreate = false
                 state.nameTodo = ''
             }
+        },
+        [todoComplete.pending] : (state,action) => {
+            state.loading = true
+        },
+        [todoComplete.fulfilled] : (state,action) => {
+            state.loading = false
         }
     }
 
